@@ -170,6 +170,35 @@ func updateValue(s string) {
 	binStr = bin + s
 }
 
+func writeFiled(rStr, vStr string) {
+	if binStr == "" {
+		return
+	}
+
+	r, err := getRange(rStr)
+	if err != nil {
+		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
+		return
+	}
+	val, err := strconv.ParseInt(vStr, 0, 64)
+	if err != nil {
+		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
+		return
+	}
+
+	max := (2 << uint(r.end-r.start)) - 1
+	if val < 0 || int(val) > max {
+		ui.Error(fmt.Sprint("val is out of range [%d, %d]", 0, max))
+		return
+	}
+
+	s := strconv.FormatInt(val, 2)
+	l := len(s)
+	bin := strings.Repeat("0", r.end-r.start+1-l)
+	bin = bin + s
+	fmt.Println(bin)
+}
+
 func handleInput(input string) (exit bool) {
 	exit = false
 	cmdline := strings.Fields(input)
@@ -189,14 +218,14 @@ func handleInput(input string) (exit bool) {
 		printAllFormat(binStr)
 	case "value", "v":
 		if len(cmdline) < 2 {
-			ui.Error("Needs an argument")
+			ui.Error("Needs argument: <range>")
 			return
 		}
 		updateValue(cmdline[1])
 		printAllFormat(binStr)
 	case "set", "s", "clear", "c":
 		if len(cmdline) < 2 {
-			ui.Error("Needs an argument")
+			ui.Error("Needs argument: <range>")
 			return
 		}
 		set := true
@@ -204,6 +233,12 @@ func handleInput(input string) (exit bool) {
 			set = false
 		}
 		updateBit(cmdline[1], set)
+		printAllFormat(binStr)
+	case "write", "w":
+		if len(cmdline) < 3 {
+			ui.Error("Needs arguments: <range> <val>")
+		}
+		writeFiled(cmdline[1], cmdline[2])
 		printAllFormat(binStr)
 	default:
 		showReg(cmdline[0])
@@ -214,13 +249,14 @@ func handleInput(input string) (exit bool) {
 
 func printUsage() {
 	ui.Output("Usage:")
-	ui.Output("  [h]elp         : print this message.")
-	ui.Output("  [p]rint        : print input value.")
-	ui.Output("  [v]alue <val>  : input value.")
-	ui.Output("  [s]et <bit>    : set <bit> to 1.")
-	ui.Output("  [c]lear <bit>  : clear <bit> to 0.")
-	ui.Output("  <patter>       : bit number or range of bits, like 21, 12:14 or 14:12.")
-	ui.Output("  exit           : exit this program.")
+	ui.Output("  [h]elp          : print this message.")
+	ui.Output("  [p]rint         : print input value.")
+	ui.Output("  [v]alue <val>   : input value.")
+	ui.Output("  [s]et <bit>     : set <bit> to 1.")
+	ui.Output("  [c]lear <bit>   : clear <bit> to 0.")
+	ui.Output("  [w]rite <r> <v> : write val <v> into field range <r>.")
+	ui.Output("  <range>         : read the value of field range <range>, like 1 or 2:3.")
+	ui.Output("  exit            : exit this program.")
 }
 
 func main() {
@@ -238,8 +274,7 @@ func main() {
 	}
 
 	for {
-		fmt.Println()
-		input, err := ui.Ask(">>>")
+		input, err := ui.Ask("\n>>>")
 		if err != nil {
 			fmt.Println(err)
 		}
