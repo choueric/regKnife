@@ -180,6 +180,7 @@ func writeFiled(rStr, vStr string) {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
 		return
 	}
+
 	val, err := strconv.ParseInt(vStr, 0, 64)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
@@ -194,9 +195,20 @@ func writeFiled(rStr, vStr string) {
 
 	s := strconv.FormatInt(val, 2)
 	l := len(s)
-	bin := strings.Repeat("0", r.end-r.start+1-l)
-	bin = bin + s
-	fmt.Println(bin)
+	sub := strings.Repeat("0", r.end-r.start+1-l)
+	sub = sub + s
+	subByte := []byte(sub)
+	fmt.Println(sub)
+
+	binByte := []byte(binStr)
+	j := r.end - r.start
+	for i := r.start; i <= r.end; i++ {
+		binByte[regLen-1-i] = subByte[j]
+		j--
+	}
+
+	// update global variable
+	binStr = string(binByte)
 }
 
 func handleInput(input string) (exit bool) {
