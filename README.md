@@ -20,33 +20,38 @@ Using this tool makes this work much eaiser:
 
 1. Start this program, `-l 16` set the register length to 16 (default is 32). 
    There is a shell-like UI.
-   
+   ```
    $ regknife -l 16
+   ```
 
 2. Input the register value by 'value' command, and see the output like:
-   
+   ```
    >>> value 0x05cd
    bin: 0000,0101,1100,1101
    dec: 1485
    hex: 0x5cd
+   ```
    
 3. See the value of bit 0, and, of course, it is 1:
-   
+   ```
    >>> 0
    bin: 1
    dec: 1
    hex: 0x1
+   ```
    
 4. See the byte count filed, it's transferred 23 bytes:
-
+   ```
    >>> 6:15
    bin: 00,0001,0111
    dec: 23
    hex: 0x17
+   ```
    
 5. You can set bit 2:
-	
+   ```	
    >>> s 2
    bin: 0000,0101,1100,1101
    dec: 1485
    hex: 0x5cd
+   ```
