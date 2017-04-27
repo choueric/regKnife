@@ -83,19 +83,6 @@ func initUi() error {
 	return nil
 }
 
-func updateBit(bit int, set bool) {
-	bit = regLen - 1 - bit
-	binByte := []byte(binStr)
-
-	if set {
-		binByte[bit] = '1'
-	} else {
-		binByte[bit] = '0'
-	}
-
-	binStr = string(binByte)
-}
-
 func updateBinStr(val int64) string {
 	s := strconv.FormatInt(val, 2)
 	l := len(s)
@@ -120,6 +107,9 @@ func formateBinStr(bin string) string {
 }
 
 func printAllFormat(bin string) {
+	if binStr == "" {
+		return
+	}
 	dec, err := strconv.ParseInt(bin, 2, 64)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert subbin to decimal failed: %v", err))
@@ -129,6 +119,31 @@ func printAllFormat(bin string) {
 	fmt.Println("bin:", formateBinStr(bin))
 	fmt.Println("dec:", dec)
 	fmt.Printf("hex: 0x%x\n", dec)
+}
+
+func updateBit(input string, set bool) {
+	if binStr == "" {
+		ui.Info("empty value. Use 'value' to update.")
+		return
+	}
+
+	r, err := getRange(input)
+	if err != nil {
+		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
+		return
+	}
+
+	binByte := []byte(binStr)
+	c := byte('0')
+	if set {
+		c = '1'
+	}
+	for i := r.start; i <= r.end; i++ {
+		binByte[regLen-1-i] = c
+	}
+
+	// update global variable
+	binStr = string(binByte)
 }
 
 func showReg(input string) {
@@ -188,19 +203,14 @@ func handleInput(input string) (exit bool) {
 			ui.Error("Needs an argument")
 			return
 		}
-		bit, err := strconv.Atoi(cmdline[1])
-		if err != nil {
-			ui.Error(fmt.Sprintf("%v", err))
-			return
-		}
 		set := true
 		if cmdline[0] == "clear" || cmdline[0] == "c" {
 			set = false
 		}
-		updateBit(bit, set)
+		updateBit(cmdline[1], set)
 		printAllFormat(binStr)
 	default:
-		showReg(strings.TrimSpace(input))
+		showReg(cmdline[0])
 	}
 
 	return
