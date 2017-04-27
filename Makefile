@@ -1,4 +1,4 @@
-EXEC = regView
+EXEC = regview
 
 TAR = $(EXEC)-$(VER).tar.gz
 BIN = $(DESTDIR)/usr/bin
