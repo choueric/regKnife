@@ -18,6 +18,50 @@ var (
 	value  int64
 )
 
+type iRange struct { // index range
+	start int
+	end   int
+}
+
+// 1 -> (1,1)
+// 2:3 -> (2,3)
+// 3:2 -> (2,3)
+func getRange(input string) (iRange, error) {
+	var r iRange
+	if strings.Contains(input, ":") {
+		index := strings.Split(input, ":")
+		if len(index) == 0 {
+			return r, errors.New("invalid range pattern")
+		}
+
+		v, err := strconv.ParseInt(index[0], 0, 64)
+		if err != nil {
+			return r, err
+		}
+		r.start = int(v)
+		v, err = strconv.ParseInt(index[1], 0, 64)
+		if err != nil {
+			return r, err
+		}
+		r.end = int(v)
+		if r.start > r.end {
+			r.start, r.end = r.end, r.start
+		}
+	} else {
+		v, err := strconv.ParseInt(input, 0, 64)
+		if err != nil {
+			return r, err
+		}
+		r.start = int(v)
+		r.end = int(v)
+	}
+
+	if r.start < 0 || r.end >= regLen {
+		return r, errors.New(fmt.Sprintf("range is invalid, [%d, %d].", 0, regLen-1))
+	}
+	return r, nil
+}
+
 func initUi() error {
 	ui = new(cli.ColoredUi)
 	if ui == nil {
@@ -87,53 +131,23 @@ func printAllFormat(bin string) {
 	fmt.Printf("hex: 0x%x\n", dec)
 }
 
-func showBits(start, end int) {
-	start_index := regLen - 1 - end
-	end_index := regLen - 1 - start
+func showReg(input string) {
+	if binStr == "" {
+		ui.Info("empty value. Use 'value' to update.")
+		return
+	}
+
+	r, err := getRange(input)
+	if err != nil {
+		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
+		return
+	}
+
+	start_index := regLen - 1 - r.end
+	end_index := regLen - 1 - r.start
 	subbin := binStr[start_index : end_index+1]
 
 	printAllFormat(subbin)
-}
-
-func handleViewReg(input string) {
-	var start, end int
-	if strings.Contains(input, ":") {
-		index := strings.Split(input, ":")
-		if len(index) == 0 {
-			ui.Error("invalid range pattern")
-			return
-		}
-
-		v, err := strconv.ParseInt(index[0], 0, 64)
-		if err != nil {
-			ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
-			return
-		}
-		start = int(v)
-		v, err = strconv.ParseInt(index[1], 0, 64)
-		if err != nil {
-			ui.Error(fmt.Sprintf("parse range end index failed, %v", err))
-			return
-		}
-		end = int(v)
-		if start > end {
-			start, end = end, start
-		}
-	} else {
-		v, err := strconv.ParseInt(input, 0, 64)
-		if err != nil {
-			ui.Error(fmt.Sprintf("parse single index failed, %v", err))
-			return
-		}
-		start = int(v)
-		end = int(v)
-	}
-
-	if start < 0 || end >= regLen {
-		ui.Error(fmt.Sprintf("range is invalid, [%d, %d].", 0, regLen-1))
-		return
-	}
-	showBits(start, end)
 }
 
 func changeValue(s string) string {
@@ -148,6 +162,11 @@ func changeValue(s string) string {
 func handleInput(input string) (exit bool) {
 	exit = false
 	cmdline := strings.Fields(input)
+
+	if len(cmdline) == 0 {
+		printUsage()
+		return
+	}
 
 	switch cmdline[0] {
 	case "exit":
@@ -181,7 +200,7 @@ func handleInput(input string) (exit bool) {
 		updateBit(bit, set)
 		printAllFormat(binStr)
 	default:
-		handleViewReg(input)
+		showReg(strings.TrimSpace(input))
 	}
 
 	return
