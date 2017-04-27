@@ -39,7 +39,20 @@ func initUi() error {
 	return nil
 }
 
-func genBinStr(val int64) string {
+func updateBit(bit int, set bool) {
+	bit = regLen - 1 - bit
+	binByte := []byte(binStr)
+
+	if set {
+		binByte[bit] = '1'
+	} else {
+		binByte[bit] = '0'
+	}
+
+	binStr = string(binByte)
+}
+
+func updateBinStr(val int64) string {
 	s := strconv.FormatInt(val, 2)
 	l := len(s)
 	bin := strings.Repeat("0", regLen-l)
@@ -123,24 +136,20 @@ func handleViewReg(input string) {
 	showBits(start, end)
 }
 
-func changeValue() string {
-	s, err := ui.Ask("input value:")
-	if err != nil {
-		ui.Error(fmt.Sprintf("get input failed: %v", err))
-		return ""
-	}
-
+func changeValue(s string) string {
 	val, err := strconv.ParseInt(s, 0, 64)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
 		return ""
 	}
-	return genBinStr(val)
+	return updateBinStr(val)
 }
 
 func handleInput(input string) (exit bool) {
 	exit = false
-	switch input {
+	cmdline := strings.Fields(input)
+
+	switch cmdline[0] {
 	case "exit":
 		exit = true
 		return
@@ -149,7 +158,27 @@ func handleInput(input string) (exit bool) {
 	case "print", "p":
 		printAllFormat(binStr)
 	case "value", "v":
-		binStr = changeValue()
+		if len(cmdline) < 2 {
+			ui.Error("Needs an argument")
+			return
+		}
+		binStr = changeValue(cmdline[1])
+		printAllFormat(binStr)
+	case "set", "s", "clear", "c":
+		if len(cmdline) < 2 {
+			ui.Error("Needs an argument")
+			return
+		}
+		bit, err := strconv.Atoi(cmdline[1])
+		if err != nil {
+			ui.Error(fmt.Sprintf("%v", err))
+			return
+		}
+		set := true
+		if cmdline[0] == "clear" || cmdline[0] == "c" {
+			set = false
+		}
+		updateBit(bit, set)
 		printAllFormat(binStr)
 	default:
 		handleViewReg(input)
@@ -160,11 +189,13 @@ func handleInput(input string) (exit bool) {
 
 func printUsage() {
 	ui.Output("Usage:")
-	ui.Output("  [h]elp   : print this message.")
-	ui.Output("  [p]rint  : print input value.")
-	ui.Output("  [v]alue  : input value.")
-	ui.Output("  <patter> : bit number or range of bits, like 21, 12:14 or 14:12.")
-	ui.Output("  exit     : exit this program.")
+	ui.Output("  [h]elp         : print this message.")
+	ui.Output("  [p]rint        : print input value.")
+	ui.Output("  [v]alue <val>  : input value.")
+	ui.Output("  [s]et <bit>    : set <bit> to 1.")
+	ui.Output("  [c]lear <bit>  : clear <bit> to 0.")
+	ui.Output("  <patter>       : bit number or range of bits, like 21, 12:14 or 14:12.")
+	ui.Output("  exit           : exit this program.")
 }
 
 func main() {
