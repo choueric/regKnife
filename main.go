@@ -83,14 +83,6 @@ func initUi() error {
 	return nil
 }
 
-func updateBinStr(val int64) string {
-	s := strconv.FormatInt(val, 2)
-	l := len(s)
-	bin := strings.Repeat("0", regLen-l)
-	bin = bin + s
-	return bin
-}
-
 func formateBinStr(bin string) string {
 	var s string
 	strlen := len(bin)
@@ -165,13 +157,17 @@ func showReg(input string) {
 	printAllFormat(subbin)
 }
 
-func changeValue(s string) string {
+func updateValue(s string) {
 	val, err := strconv.ParseInt(s, 0, 64)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
 		return ""
 	}
-	return updateBinStr(val)
+
+	s := strconv.FormatInt(val, 2)
+	l := len(s)
+	bin := strings.Repeat("0", regLen-l)
+	binStr = bin + s
 }
 
 func handleInput(input string) (exit bool) {
@@ -196,7 +192,7 @@ func handleInput(input string) (exit bool) {
 			ui.Error("Needs an argument")
 			return
 		}
-		binStr = changeValue(cmdline[1])
+		updateValue(cmdline[1])
 		printAllFormat(binStr)
 	case "set", "s", "clear", "c":
 		if len(cmdline) < 2 {
