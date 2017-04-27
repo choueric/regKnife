@@ -161,10 +161,10 @@ func updateValue(s string) {
 	val, err := strconv.ParseInt(s, 0, 64)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
-		return ""
+		return
 	}
 
-	s := strconv.FormatInt(val, 2)
+	s = strconv.FormatInt(val, 2)
 	l := len(s)
 	bin := strings.Repeat("0", regLen-l)
 	binStr = bin + s
