@@ -46,7 +46,7 @@ func initUi() error {
 
 // setFieldRangeOfBinStr sets to 1 or clears to 0 with the filed range of binStr
 // rStr is a filed range string
-func setFieldRangeOfBinStr(rStr string, set bool) {
+func setFieldOfBinStr(rStr string, set bool) {
 	r, err := getRange(rStr)
 	if err != nil {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
@@ -164,7 +164,7 @@ func handleInput(input string) (exit bool) {
 		if cmdline[0] == "clear" || cmdline[0] == "c" {
 			set = false
 		}
-		setFieldRangeOfBinStr(cmdline[1], set)
+		setFieldOfBinStr(cmdline[1], set)
 		outputTriFormat(os.Stdout, binStr)
 	case "write", "w":
 		if len(cmdline) < 3 {
