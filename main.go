@@ -45,39 +45,16 @@ func initUi() error {
 	return nil
 }
 
-func formateBinStr(bin string) string {
-	var s string
-	strlen := len(bin)
-	count := 0
-
-	for i := strlen - 1; i >= 0; i-- {
-		if count%4 == 0 && count != 0 {
-			s = "," + s
-		}
-		count++
-		s = string(bin[i]) + s
-	}
-	return s
-}
-
-func printAllFormat(bin string) {
+func checkBinStr() bool {
 	if binStr == "" {
-		return
+		ui.Info("empty value. Use 'value' to update.")
+		return false
 	}
-	dec, err := parseBin(bin)
-	if err != nil {
-		ui.Error(fmt.Sprintf("convert subbin to decimal failed: %v", err))
-		return
-	}
-
-	fmt.Println("bin:", formateBinStr(bin))
-	fmt.Println("dec:", dec)
-	fmt.Printf("hex: 0x%x\n", dec)
+	return true
 }
 
 func updateBit(input string, set bool) {
-	if binStr == "" {
-		ui.Info("empty value. Use 'value' to update.")
+	if !checkBinStr() {
 		return
 	}
 
@@ -101,8 +78,7 @@ func updateBit(input string, set bool) {
 }
 
 func showReg(input string) {
-	if binStr == "" {
-		ui.Info("empty value. Use 'value' to update.")
+	if !checkBinStr() {
 		return
 	}
 
@@ -116,7 +92,7 @@ func showReg(input string) {
 	end_index := regLen - 1 - r.start
 	subbin := binStr[start_index : end_index+1]
 
-	printAllFormat(subbin)
+	outputTriFormat(os.Stdout, subbin)
 }
 
 func updateValue(s string) {
@@ -133,7 +109,7 @@ func updateValue(s string) {
 }
 
 func writeFiled(rStr, vStr string) {
-	if binStr == "" {
+	if !checkBinStr() {
 		return
 	}
 
@@ -189,14 +165,14 @@ func handleInput(input string) (exit bool) {
 	case "help", "h":
 		printUsage()
 	case "print", "p":
-		printAllFormat(binStr)
+		outputTriFormat(os.Stdout, binStr)
 	case "value", "v":
 		if len(cmdline) < 2 {
 			ui.Error("Needs argument: <range>")
 			return
 		}
 		updateValue(cmdline[1])
-		printAllFormat(binStr)
+		outputTriFormat(os.Stdout, binStr)
 	case "set", "s", "clear", "c":
 		if len(cmdline) < 2 {
 			ui.Error("Needs argument: <range>")
@@ -207,13 +183,13 @@ func handleInput(input string) (exit bool) {
 			set = false
 		}
 		updateBit(cmdline[1], set)
-		printAllFormat(binStr)
+		outputTriFormat(os.Stdout, binStr)
 	case "write", "w":
 		if len(cmdline) < 3 {
 			ui.Error("Needs arguments: <range> <val>")
 		}
 		writeFiled(cmdline[1], cmdline[2])
-		printAllFormat(binStr)
+		outputTriFormat(os.Stdout, binStr)
 	default:
 		showReg(cmdline[0])
 	}

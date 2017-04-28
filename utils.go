@@ -3,23 +3,25 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
 	"strconv"
 	"strings"
 )
 
-// s is hex(0x), oct(0) otherwise decial
+// parseInt convert integer string into int64 type.
+// format of s can be hex(0x), oct(0) otherwise decial
 func parseInt(s string) (int64, error) {
 	return strconv.ParseInt(s, 0, 64)
 }
 
-// s is binary string "11001" -> 0x19
+// parseBin convert binary string into int64 type.
+// format of s is binary string. e.g. "11001" -> 0x19
 func parseBin(s string) (int64, error) {
 	return strconv.ParseInt(s, 2, 64)
 }
 
-// 1 -> (1,1)
-// 2:3 -> (2,3)
-// 3:2 -> (2,3)
+// getRange convert range string into fRange structure.
+// e.g. 1 -> (1,1), 2:3 -> (2,3), 3:2 -> (2,3)
 func getRange(input string) (fRange, error) {
 	var r fRange
 	if input == "" {
@@ -57,4 +59,38 @@ func getRange(input string) (fRange, error) {
 		return r, errors.New(fmt.Sprintf("getRange invalid range [%d, %d].", 0, regLen-1))
 	}
 	return r, nil
+}
+
+// decorateBinStr convert binary string into decorated format
+// e.g. "101010" -> "10,1010"
+func decorateBinStr(bin string) string {
+	var s string
+	strlen := len(bin)
+	count := 0
+
+	for i := strlen - 1; i >= 0; i-- {
+		if count%4 == 0 && count != 0 {
+			s = "," + s
+		}
+		count++
+		s = string(bin[i]) + s
+	}
+	return s
+}
+
+// outputTriFormat outputs binary string into three format: decorated binary,
+// decimal and heximal.
+func outputTriFormat(w io.Writer, bin string) {
+	if binStr == "" {
+		return
+	}
+	dec, err := parseBin(bin)
+	if err != nil {
+		ui.Error(fmt.Sprintf("parseBin failed: %v", err))
+		return
+	}
+
+	fmt.Fprintln(w, "bin:", decorateBinStr(bin))
+	fmt.Fprintln(w, "dec:", dec)
+	fmt.Fprintf(w, "hex: 0x%x\n", dec)
 }

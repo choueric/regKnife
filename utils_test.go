@@ -53,3 +53,33 @@ func Test_getRange(t *testing.T) {
 		t.Error("expect error")
 	}
 }
+
+func Test_decorateBinStr(t *testing.T) {
+	input := "10"
+	expect := "10"
+	output := decorateBinStr(input)
+	if output != expect {
+		t.Error("error output:", output)
+	}
+
+	input = "101010"
+	expect = "10,1010"
+	output = decorateBinStr(input)
+	if output != expect {
+		t.Error("error output:", output)
+	}
+
+	input = "110101010"
+	expect = "1,1010,1010"
+	output = decorateBinStr(input)
+	if output != expect {
+		t.Error("error output:", output)
+	}
+
+	input = ""
+	expect = ""
+	output = decorateBinStr(input)
+	if output != expect {
+		t.Error("error output:", output)
+	}
+}
