@@ -17,7 +17,7 @@ Usage:
   <f>             : read the value of field <f>.
   exit            : exit this program.
   
-Two format to represent filed:
+Two format to represent field:
   single bit  : like 1, 3, 0
   field range : like 0:3, 3:1
 ```
@@ -54,7 +54,7 @@ Using this tool makes this work much eaiser:
    hex: 0x5cd
    ```
    
-3. See the value of enable filed:
+3. See the value of enable field:
    ```
    >>> 0
    bin: 1
@@ -62,7 +62,7 @@ Using this tool makes this work much eaiser:
    hex: 0x1
    ```
    
-4. See the byte_count filed:
+4. See the byte_count field:
    ```
    >>> 6:15
    bin: 00,0001,0111
@@ -70,7 +70,7 @@ Using this tool makes this work much eaiser:
    hex: 0x17
    ```
    
-5. You can clear the enable filed:
+5. You can clear the enable field:
    ```	
    >>> c 0
    bin: 0000,0101,1100,1100
@@ -79,7 +79,7 @@ Using this tool makes this work much eaiser:
    
    ```
    
-6. You can write the byte_count filed to 77:
+6. You can write the byte_count field to 77:
    ```
    >>> w 6:15 77
    0001001101
