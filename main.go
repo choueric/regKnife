@@ -65,20 +65,6 @@ func setFieldOfBinStr(rStr string, set bool) {
 	binStr = string(binByte)
 }
 
-func showReg(input string) {
-	r, err := getRange(input)
-	if err != nil {
-		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
-		return
-	}
-
-	start_index := regLen - 1 - r.end
-	end_index := regLen - 1 - r.start
-	subbin := binStr[start_index : end_index+1]
-
-	outputTriFormat(os.Stdout, subbin)
-}
-
 // updateBinStr converts decimal or heximal format s into register-length
 // binary string and update the global variable binStr
 // e.g. "0x11" -> "00010001" (regLen = 8)
@@ -130,6 +116,20 @@ func writeFiledOfBinStr(rStr, vStr string) {
 	}
 
 	binStr = string(binByte)
+}
+
+func showReg(input string) {
+	r, err := getRange(input)
+	if err != nil {
+		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
+		return
+	}
+
+	start_index := regLen - 1 - r.end
+	end_index := regLen - 1 - r.start
+	subbin := binStr[start_index : end_index+1]
+
+	outputTriFormat(os.Stdout, subbin)
 }
 
 func handleInput(input string) (exit bool) {
