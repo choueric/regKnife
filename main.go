@@ -15,7 +15,6 @@ var (
 	ui     *cli.ColoredUi
 	regLen = 32
 	binStr string
-	value  int64
 )
 
 // field range
@@ -45,19 +44,7 @@ func initUi() error {
 	return nil
 }
 
-func checkBinStr() bool {
-	if binStr == "" {
-		ui.Info("empty value. Use 'value' to update.")
-		return false
-	}
-	return true
-}
-
 func updateBit(input string, set bool) {
-	if !checkBinStr() {
-		return
-	}
-
 	r, err := getRange(input)
 	if err != nil {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
@@ -78,10 +65,6 @@ func updateBit(input string, set bool) {
 }
 
 func showReg(input string) {
-	if !checkBinStr() {
-		return
-	}
-
 	r, err := getRange(input)
 	if err != nil {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
@@ -95,7 +78,7 @@ func showReg(input string) {
 	outputTriFormat(os.Stdout, subbin)
 }
 
-func updateValue(s string) {
+func updateBinStr(s string) {
 	val, err := parseInt(s)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
@@ -109,10 +92,6 @@ func updateValue(s string) {
 }
 
 func writeFiled(rStr, vStr string) {
-	if !checkBinStr() {
-		return
-	}
-
 	r, err := getRange(rStr)
 	if err != nil {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
@@ -151,8 +130,8 @@ func writeFiled(rStr, vStr string) {
 
 func handleInput(input string) (exit bool) {
 	exit = false
-	cmdline := strings.Fields(input)
 
+	cmdline := strings.Fields(input)
 	if len(cmdline) == 0 {
 		printUsage()
 		return
@@ -170,7 +149,7 @@ func handleInput(input string) (exit bool) {
 			ui.Error("Needs argument: <range>")
 			return
 		}
-		updateValue(cmdline[1])
+		updateBinStr(cmdline[1])
 		outputTriFormat(os.Stdout, binStr)
 	case "set", "s", "clear", "c":
 		if len(cmdline) < 2 {
@@ -221,6 +200,8 @@ func main() {
 		fmt.Println(err)
 		os.Exit(3)
 	}
+
+	updateBinStr("0")
 
 	for {
 		input, err := ui.Ask("\n>>>")
