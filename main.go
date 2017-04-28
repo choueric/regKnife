@@ -49,7 +49,7 @@ func initUi() error {
 func setFieldOfBinStr(rStr string, set bool) {
 	r, err := getRange(rStr)
 	if err != nil {
-		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
+		ui.Error(fmt.Sprintf("parse field start index failed, %v", err))
 		return
 	}
 
@@ -85,7 +85,7 @@ func updateBinStr(s string) {
 func writeFiledOfBinStr(rStr, vStr string) {
 	r, err := getRange(rStr)
 	if err != nil {
-		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
+		ui.Error(fmt.Sprintf("parse field start index failed, %v", err))
 		return
 	}
 
@@ -122,7 +122,7 @@ func writeFiledOfBinStr(rStr, vStr string) {
 func showFieldOfBinStr(rStr string) {
 	r, err := getRange(rStr)
 	if err != nil {
-		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
+		ui.Error(fmt.Sprintf("parse field start index failed, %v", err))
 		return
 	}
 
@@ -151,14 +151,14 @@ func handleInput(input string) (exit bool) {
 		outputTriFormat(os.Stdout, binStr)
 	case "value", "v":
 		if len(cmdline) < 2 {
-			ui.Error("Needs argument: <range>")
+			ui.Error("Needs argument: <field>")
 			return
 		}
 		updateBinStr(cmdline[1])
 		outputTriFormat(os.Stdout, binStr)
 	case "set", "s", "clear", "c":
 		if len(cmdline) < 2 {
-			ui.Error("Needs argument: <range>")
+			ui.Error("Needs argument: <field>")
 			return
 		}
 		set := true
@@ -169,7 +169,8 @@ func handleInput(input string) (exit bool) {
 		outputTriFormat(os.Stdout, binStr)
 	case "write", "w":
 		if len(cmdline) < 3 {
-			ui.Error("Needs arguments: <range> <val>")
+			ui.Error("Needs arguments: <field> <val>")
+			return
 		}
 		writeFiledOfBinStr(cmdline[1], cmdline[2])
 		outputTriFormat(os.Stdout, binStr)
