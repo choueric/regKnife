@@ -18,7 +18,8 @@ var (
 	value  int64
 )
 
-type iRange struct { // index range
+// index range
+type iRange struct {
 	start int
 	end   int
 }
@@ -34,12 +35,12 @@ func getRange(input string) (iRange, error) {
 			return r, errors.New("invalid range pattern")
 		}
 
-		v, err := strconv.ParseInt(index[0], 0, 64)
+		v, err := parseInt(index[0])
 		if err != nil {
 			return r, err
 		}
 		r.start = int(v)
-		v, err = strconv.ParseInt(index[1], 0, 64)
+		v, err = parseInt(index[1])
 		if err != nil {
 			return r, err
 		}
@@ -48,7 +49,7 @@ func getRange(input string) (iRange, error) {
 			r.start, r.end = r.end, r.start
 		}
 	} else {
-		v, err := strconv.ParseInt(input, 0, 64)
+		v, err := parseInt(input)
 		if err != nil {
 			return r, err
 		}
@@ -102,7 +103,7 @@ func printAllFormat(bin string) {
 	if binStr == "" {
 		return
 	}
-	dec, err := strconv.ParseInt(bin, 2, 64)
+	dec, err := parseBin(bin)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert subbin to decimal failed: %v", err))
 		return
@@ -158,7 +159,7 @@ func showReg(input string) {
 }
 
 func updateValue(s string) {
-	val, err := strconv.ParseInt(s, 0, 64)
+	val, err := parseInt(s)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
 		return
@@ -181,7 +182,7 @@ func writeFiled(rStr, vStr string) {
 		return
 	}
 
-	val, err := strconv.ParseInt(vStr, 0, 64)
+	val, err := parseInt(vStr)
 	if err != nil {
 		ui.Error(fmt.Sprintf("convert to Int failed: %v", err))
 		return
