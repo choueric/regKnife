@@ -78,6 +78,9 @@ func showReg(input string) {
 	outputTriFormat(os.Stdout, subbin)
 }
 
+// updateBinStr converts decimal or heximal format s into register-length
+// binary string and update the global variable binStr
+// e.g. "0x11" -> "00010001" (regLen = 8)
 func updateBinStr(s string) {
 	val, err := parseInt(s)
 	if err != nil {
