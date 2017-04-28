@@ -2,6 +2,28 @@
 
 This tools is useful for people who are embedded software engineers, because I am.
 
+# usage
+
+This is the built-in usage information:
+
+```
+Usage:
+  [h]elp          : print this message.
+  [p]rint         : show current value.
+  [v]alue <v>     : change value to <v>.
+  [s]et <f>       : set <f to 1.
+  [c]lear <f>     : clear <f> to 0.
+  [w]rite <f> <v> : write val <v> into field <f>.
+  <f>             : read the value of field <f>.
+  exit            : exit this program.
+  
+Two format to represent filed:
+  single bit  : like 1, 3, 0
+  field range : like 0:3, 3:1
+```
+
+# example
+
 For example, there is a register in chip like:
 
 ```
@@ -12,9 +34,9 @@ Bit 6-15 : byte count.
 ```
 
 It is a 16-bits register and there are three fields are useful. When we read this
-register in driver code and get value is 0x05cd, what does it mean ? It is time 
-to check the datasheet now. It is a bording and anoying work, especailly when the
-register is 32-bits.
+register in driver code and get value is `0x05cd`, what does it mean ? It is time 
+to check the datasheet. This is usually a bording and even anoying work, especailly
+when the length of register is 32-bits.
 
 Using this tool makes this work much eaiser:
 
@@ -32,7 +54,7 @@ Using this tool makes this work much eaiser:
    hex: 0x5cd
    ```
    
-3. See the value of bit 0, and, of course, it is 1:
+3. See the value of enable filed:
    ```
    >>> 0
    bin: 1
@@ -40,7 +62,7 @@ Using this tool makes this work much eaiser:
    hex: 0x1
    ```
    
-4. See the byte count filed, it's transferred 23 bytes:
+4. See the byte_count filed:
    ```
    >>> 6:15
    bin: 00,0001,0111
@@ -48,10 +70,25 @@ Using this tool makes this work much eaiser:
    hex: 0x17
    ```
    
-5. You can set bit 2:
+5. You can clear the enable filed:
    ```	
-   >>> s 2
-   bin: 0000,0101,1100,1101
-   dec: 1485
-   hex: 0x5cd
+   >>> c 0
+   bin: 0000,0101,1100,1100
+   dec: 1484
+   hex: 0x5cc
+   
+   ```
+   
+6. You can write the byte_count filed to 77:
+   ```
+   >>> w 6:15 77
+   0001001101
+   bin: 0001,0011,0100,1100
+   dec: 4940
+   hex: 0x134c
+   
+   >>> 6:15
+   bin: 00,0100,1101
+   dec: 77
+   hex: 0x4d
    ```
