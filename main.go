@@ -118,8 +118,9 @@ func writeFiledOfBinStr(rStr, vStr string) {
 	binStr = string(binByte)
 }
 
-func showReg(input string) {
-	r, err := getRange(input)
+// showFieldOfBinStr shows the filed rStr of binStr in three formats.
+func showFieldOfBinStr(rStr string) {
+	r, err := getRange(rStr)
 	if err != nil {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
 		return
@@ -173,7 +174,7 @@ func handleInput(input string) (exit bool) {
 		writeFiledOfBinStr(cmdline[1], cmdline[2])
 		outputTriFormat(os.Stdout, binStr)
 	default:
-		showReg(cmdline[0])
+		showFieldOfBinStr(cmdline[0])
 	}
 
 	return
