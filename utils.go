@@ -20,8 +20,8 @@ func parseBin(s string) (int64, error) {
 // 1 -> (1,1)
 // 2:3 -> (2,3)
 // 3:2 -> (2,3)
-func getRange(input string) (iRange, error) {
-	var r iRange
+func getRange(input string) (fRange, error) {
+	var r fRange
 	if input == "" {
 		return r, errors.New("getRange empty input")
 	}

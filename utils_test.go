@@ -4,7 +4,7 @@ import "testing"
 
 func Test_getRange(t *testing.T) {
 	input := "3"
-	expect := iRange{3, 3}
+	expect := fRange{3, 3}
 
 	output, err := getRange(input)
 	if err != nil {
@@ -15,7 +15,7 @@ func Test_getRange(t *testing.T) {
 	}
 
 	input = "3:0"
-	expect = iRange{0, 3}
+	expect = fRange{0, 3}
 	output, err = getRange(input)
 	if err != nil {
 		t.Error(err)
@@ -25,7 +25,7 @@ func Test_getRange(t *testing.T) {
 	}
 
 	input = "1:4"
-	expect = iRange{1, 4}
+	expect = fRange{1, 4}
 	output, err = getRange(input)
 	if err != nil {
 		t.Error(err)

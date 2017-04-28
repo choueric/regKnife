@@ -18,8 +18,8 @@ var (
 	value  int64
 )
 
-// index range
-type iRange struct {
+// field range
+type fRange struct {
 	start int
 	end   int
 }
