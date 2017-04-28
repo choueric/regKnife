@@ -185,11 +185,11 @@ func printUsage() {
 	ui.Output("Usage:")
 	ui.Output("  [h]elp          : print this message.")
 	ui.Output("  [p]rint         : show current value.")
-	ui.Output("  [v]alue <val>   : change value.")
-	ui.Output("  [s]et <filed>   : set <filed> to 1.")
-	ui.Output("  [c]lear <filed  : clear <filed> to 0.")
+	ui.Output("  [v]alue <v>     : change value to <v>.")
+	ui.Output("  [s]et <f>       : set <f to 1.")
+	ui.Output("  [c]lear <f>     : clear <f> to 0.")
 	ui.Output("  [w]rite <f> <v> : write val <v> into field <f>.")
-	ui.Output("  <filed>         : read the value of field <filed>, like 1 or 2:3.")
+	ui.Output("  <f>             : read the value of field <f>, like 1 or 2:3.")
 	ui.Output("  exit            : exit this program.")
 }
 
