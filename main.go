@@ -24,45 +24,6 @@ type iRange struct {
 	end   int
 }
 
-// 1 -> (1,1)
-// 2:3 -> (2,3)
-// 3:2 -> (2,3)
-func getRange(input string) (iRange, error) {
-	var r iRange
-	if strings.Contains(input, ":") {
-		index := strings.Split(input, ":")
-		if len(index) == 0 {
-			return r, errors.New("invalid range pattern")
-		}
-
-		v, err := parseInt(index[0])
-		if err != nil {
-			return r, err
-		}
-		r.start = int(v)
-		v, err = parseInt(index[1])
-		if err != nil {
-			return r, err
-		}
-		r.end = int(v)
-		if r.start > r.end {
-			r.start, r.end = r.end, r.start
-		}
-	} else {
-		v, err := parseInt(input)
-		if err != nil {
-			return r, err
-		}
-		r.start = int(v)
-		r.end = int(v)
-	}
-
-	if r.start < 0 || r.end >= regLen {
-		return r, errors.New(fmt.Sprintf("range is invalid, [%d, %d].", 0, regLen-1))
-	}
-	return r, nil
-}
-
 func initUi() error {
 	ui = new(cli.ColoredUi)
 	if ui == nil {
