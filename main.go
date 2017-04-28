@@ -44,8 +44,10 @@ func initUi() error {
 	return nil
 }
 
-func updateBit(input string, set bool) {
-	r, err := getRange(input)
+// setFieldRangeOfBinStr sets to 1 or clears to 0 with the filed range of binStr
+// rStr is a filed range string
+func setFieldRangeOfBinStr(rStr string, set bool) {
+	r, err := getRange(rStr)
 	if err != nil {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
 		return
@@ -60,7 +62,6 @@ func updateBit(input string, set bool) {
 		binByte[regLen-1-i] = c
 	}
 
-	// update global variable
 	binStr = string(binByte)
 }
 
@@ -163,7 +164,7 @@ func handleInput(input string) (exit bool) {
 		if cmdline[0] == "clear" || cmdline[0] == "c" {
 			set = false
 		}
-		updateBit(cmdline[1], set)
+		setFieldRangeOfBinStr(cmdline[1], set)
 		outputTriFormat(os.Stdout, binStr)
 	case "write", "w":
 		if len(cmdline) < 3 {
