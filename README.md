@@ -38,7 +38,7 @@ register in driver code and get value is `0x05cd`, what does it mean ? It is tim
 to check the datasheet. This is usually a bording and even anoying work, especailly
 when the length of register is 32-bits.
 
-Using this tool makes this work much eaiser:
+Using this tool makes this work much easier:
 
 1. Start this program, `-l 16` set the register length to 16 (default is 32). 
    There is a shell-like UI.
