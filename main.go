@@ -95,7 +95,8 @@ func updateBinStr(s string) {
 	binStr = bin + s
 }
 
-func writeFiled(rStr, vStr string) {
+// writeFiledOfBinStr changes the value in filed rStr by vStr in binStr
+func writeFiledOfBinStr(rStr, vStr string) {
 	r, err := getRange(rStr)
 	if err != nil {
 		ui.Error(fmt.Sprintf("parse range start index failed, %v", err))
@@ -128,7 +129,6 @@ func writeFiled(rStr, vStr string) {
 		j--
 	}
 
-	// update global variable
 	binStr = string(binByte)
 }
 
@@ -170,7 +170,7 @@ func handleInput(input string) (exit bool) {
 		if len(cmdline) < 3 {
 			ui.Error("Needs arguments: <range> <val>")
 		}
-		writeFiled(cmdline[1], cmdline[2])
+		writeFiledOfBinStr(cmdline[1], cmdline[2])
 		outputTriFormat(os.Stdout, binStr)
 	default:
 		showReg(cmdline[0])
