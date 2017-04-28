@@ -189,8 +189,11 @@ func printUsage() {
 	ui.Output("  [s]et <f>       : set <f to 1.")
 	ui.Output("  [c]lear <f>     : clear <f> to 0.")
 	ui.Output("  [w]rite <f> <v> : write val <v> into field <f>.")
-	ui.Output("  <f>             : read the value of field <f>, like 1 or 2:3.")
+	ui.Output("  <f>             : read the value of field <f>.")
 	ui.Output("  exit            : exit this program.")
+	ui.Output("  \nTwo format to represent filed:")
+	ui.Output("  single bit  : like 1, 3, 0")
+	ui.Output("  field range : like 0:3, 3:1")
 }
 
 func main() {
