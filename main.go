@@ -120,15 +120,11 @@ func writeFiledOfBinStr(rStr, vStr string) {
 
 // showFieldOfBinStr shows the filed rStr of binStr in three formats.
 func showFieldOfBinStr(rStr string) {
-	r, err := getRange(rStr)
+	subbin, err := getFieldStr(rStr, binStr)
 	if err != nil {
-		ui.Error(fmt.Sprintf("parse field start index failed, %v", err))
+		ui.Error(fmt.Sprintf("getFieldStr failed: %v", err))
 		return
 	}
-
-	start_index := regLen - 1 - r.end
-	end_index := regLen - 1 - r.start
-	subbin := binStr[start_index : end_index+1]
 
 	outputTriFormat(os.Stdout, subbin)
 }
@@ -191,7 +187,7 @@ func printUsage() {
 	ui.Output("  [w]rite <f> <v> : write val <v> into field <f>.")
 	ui.Output("  <f>             : read the value of field <f>.")
 	ui.Output("  exit            : exit this program.")
-	ui.Output("  \nTwo format to represent filed:")
+	ui.Output("  \nTwo formats to represent filed:")
 	ui.Output("  single bit  : like 1, 3, 0")
 	ui.Output("  field range : like 0:3, 3:1")
 }

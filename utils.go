@@ -94,3 +94,14 @@ func outputTriFormat(w io.Writer, bin string) {
 	fmt.Fprintln(w, "dec:", dec)
 	fmt.Fprintf(w, "hex: 0x%x\n", dec)
 }
+
+// getFieldStr gets the field string from str.
+func getFieldStr(rStr, str string) (string, error) {
+	r, err := getRange(rStr)
+	if err != nil {
+		return "", err
+	}
+
+	l := len(str)
+	return str[l-1-r.end : l-r.start], nil
+}

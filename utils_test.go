@@ -83,3 +83,26 @@ func Test_decorateBinStr(t *testing.T) {
 		t.Error("error output:", output)
 	}
 }
+
+func Test_getFieldStr(t *testing.T) {
+	str := "11110000"
+	input := "1:3"
+	expect := "000"
+	output, err := getFieldStr(input, str)
+	if err != nil {
+		t.Error(err)
+	}
+	if output != expect {
+		t.Error("error output:", output)
+	}
+
+	input = "5:3"
+	expect = "110"
+	output, err = getFieldStr(input, str)
+	if err != nil {
+		t.Error(err)
+	}
+	if output != expect {
+		t.Error("error output:", output)
+	}
+}
