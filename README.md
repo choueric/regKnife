@@ -1,6 +1,6 @@
 # regKnife
 
-This tools is useful for people who are embedded software engineers, because I am.
+It is used to check and manipulate the values of bits in a register. This tools is useful for people who are embedded software engineers, because I am.
 
 # usage
 
