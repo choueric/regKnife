@@ -14,8 +14,9 @@ Usage:
   [s]et <f>       : set <f to 1.
   [c]lear <f>     : clear <f> to 0.
   [w]rite <f> <v> : write val <v> into field <f>.
+  [l]ist [0]      : list all offsets of '1's or '0's.
   <f>             : read the value of field <f>.
-  exit            : exit this program.
+  exit, quit      : exit this program.
   
 Two format to represent field:
   single bit  : like 1, 3, 0
@@ -54,7 +55,7 @@ Using this tool makes this work much easier:
    hex: 0x5cd
    ```
    
-3. See the value of enable field:
+3. See the value of `enable` field, i.e. [0]:
    ```
    >>> 0
    bin: 1
@@ -62,7 +63,7 @@ Using this tool makes this work much easier:
    hex: 0x1
    ```
    
-4. See the byte_count field:
+4. See the `byte_count` field, i.e. [6:15]:
    ```
    >>> 6:15
    bin: 00,0001,0111
@@ -70,7 +71,7 @@ Using this tool makes this work much easier:
    hex: 0x17
    ```
    
-5. You can clear the enable field:
+5. You can clear the `enable` field:
    ```	
    >>> c 0
    bin: 0000,0101,1100,1100
@@ -79,7 +80,7 @@ Using this tool makes this work much easier:
    
    ```
    
-6. You can write the byte_count field to 77:
+6. You can write the `byte_count` field to 77:
    ```
    >>> w 6:15 77
    0001001101
@@ -91,4 +92,22 @@ Using this tool makes this work much easier:
    bin: 00,0100,1101
    dec: 77
    hex: 0x4d
+   ```
+7. After modification, see the current value by:
+   ```
+   >>> p
+   bin: 00,0100,1101
+   dec: 77
+   hex: 0x4d
+   ```
+8. You can show all offsets of '1's in this register:
+   ```
+   >>> l
+   6,3,2,0
+   ```
+   
+   Or show all offsets of '0's:
+   ```
+   >>> l 0
+   15,14,13,12,11,10,9,8,7,5,4,1
    ```
