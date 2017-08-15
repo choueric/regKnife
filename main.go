@@ -118,6 +118,10 @@ func writeFiledOfBinStr(rStr, vStr string) {
 	binStr = string(binByte)
 }
 
+func showTruesOffset(target rune) {
+	listOffsets(os.Stdout, binStr, target)
+}
+
 // showFieldOfBinStr shows the filed rStr of binStr in three formats.
 func showFieldOfBinStr(rStr string) {
 	subbin, err := getFieldStr(rStr, binStr)
@@ -170,6 +174,12 @@ func handleInput(input string) (exit bool) {
 		}
 		writeFiledOfBinStr(cmdline[1], cmdline[2])
 		outputTriFormat(os.Stdout, binStr)
+	case "list", "l":
+		target := '1'
+		if len(cmdline) == 2 && cmdline[1] == "0" {
+			target = '0'
+		}
+		showTruesOffset(target)
 	default:
 		showFieldOfBinStr(cmdline[0])
 	}
@@ -186,7 +196,8 @@ func printUsage() {
 	ui.Output("  [c]lear <f>     : clear <f> to 0.")
 	ui.Output("  [w]rite <f> <v> : write val <v> into field <f>.")
 	ui.Output("  <f>             : read the value of field <f>.")
-	ui.Output("  exit            : exit this program.")
+	ui.Output("  [l]ist [0]      : list the offset of '1's or '0's.")
+	ui.Output("  exit, quit      : exit this program.")
 	ui.Output("  \nTwo formats to represent filed:")
 	ui.Output("  single bit  : like 1, 3, 0")
 	ui.Output("  field range : like 0:3, 3:1")

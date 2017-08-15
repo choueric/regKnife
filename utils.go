@@ -105,3 +105,21 @@ func getFieldStr(rStr, str string) (string, error) {
 	l := len(str)
 	return str[l-1-r.end : l-r.start], nil
 }
+
+func listOffsets(w io.Writer, bin string, target rune) {
+	idx := 0
+	for i, v := range bin {
+		if v == target {
+			fmt.Fprintf(w, "%d", regLen-1-i)
+			idx = i
+			break
+		}
+	}
+
+	for i := idx + 1; i < regLen; i++ {
+		if bin[i] == byte(target) {
+			fmt.Fprintf(w, ",%d", regLen-1-i)
+		}
+	}
+	fmt.Fprintf(w, "\n")
+}
