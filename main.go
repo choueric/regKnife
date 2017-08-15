@@ -196,7 +196,7 @@ func printUsage() {
 	ui.Output("  [c]lear <f>     : clear <f> to 0.")
 	ui.Output("  [w]rite <f> <v> : write val <v> into field <f>.")
 	ui.Output("  <f>             : read the value of field <f>.")
-	ui.Output("  [l]ist [0]      : list the offset of '1's or '0's.")
+	ui.Output("  [l]ist [0]      : list all offsets of '1's or '0's.")
 	ui.Output("  exit, quit      : exit this program.")
 	ui.Output("  \nTwo formats to represent filed:")
 	ui.Output("  single bit  : like 1, 3, 0")
