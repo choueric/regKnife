@@ -143,7 +143,7 @@ func handleInput(input string) (exit bool) {
 	}
 
 	switch cmdline[0] {
-	case "exit":
+	case "exit", "quit":
 		exit = true
 	case "help", "h":
 		printUsage()
