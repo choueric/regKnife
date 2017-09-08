@@ -86,7 +86,7 @@ func outputTriFormat(w io.Writer, bin string) {
 	}
 	dec, err := parseBin(bin)
 	if err != nil {
-		ui.Error(fmt.Sprintf("parseBin failed: %v", err))
+		inst.Error(fmt.Sprintf("parseBin failed: %v\n", err))
 		return
 	}
 
