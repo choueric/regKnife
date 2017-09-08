@@ -207,7 +207,6 @@ func main() {
 		readline.Cmd("exit"),
 		readline.Cmd("quit"),
 	)
-	inst.PrintTree(os.Stdout)
 
 	updateBinStr("0")
 
