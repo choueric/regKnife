@@ -11,9 +11,7 @@ import (
 )
 
 var (
-	inst = &readline.Instance{
-		Prompt: "\033[32m>>\033[0m ",
-	}
+	inst   *readline.Instance
 	regLen = 32
 	binStr string
 )
@@ -184,7 +182,8 @@ func printUsage() {
 }
 
 func main() {
-	flag.BoolVar(&inst.Debug, "d", false, "enable debug")
+	var debug bool
+	flag.BoolVar(&debug, "d", false, "enable debug")
 	flag.IntVar(&regLen, "l", 32, "register length.")
 	flag.Parse()
 	if len(os.Args) == 2 && (os.Args[1] == "help" || os.Args[1] == "-h") {
@@ -192,8 +191,14 @@ func main() {
 		return
 	}
 
-	inst.Init(os.Stdin, os.Stdout)
-	defer inst.Deinit()
+	_inst, err := readline.New("\033[32m>>\033[0m ")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	inst = _inst
+	inst.Debug = debug
+	defer inst.Destroy()
 
 	inst.SetExecute(executeCmdline, nil)
 	inst.SetCompleter(
